@@ -1,0 +1,10 @@
+github.com
+repository
+git init <-comando di inizializzazione di un repository
+git add README.md
+git add src <-aggiunge file o cartelle alla condivisione
+.gitignore <-file di testo che indica quali file o cartelle ignorare durante la stampa dello status con:
+git status
+git commit -m "primo step" <-storia
+git remote add url dato dal sito
+git push origin master
