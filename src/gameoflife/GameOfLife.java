@@ -1,8 +1,11 @@
-/**@Title Game of Life
- * @Author Mirko Piazzola VR353055*/
+/**Game of Life 
+ * <br>
+ * @author <A HREF="mailto:mirko.piazzola@gmail.com"> Mirko Piazzola VR353055 </A>
+ */
 package gameoflife;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -126,7 +129,8 @@ public class GameOfLife extends JFrame{
                     + "be used in this instance of the game of life:",
                     "Game Of Life",JOptionPane.QUESTION_MESSAGE);
             frame = new GameOfLife(Integer.parseInt(res));
-        }catch(Exception e){
+        }catch(HeadlessException | NumberFormatException e){
+            System.out.println(e.toString());
             frame = new GameOfLife(1);
         }
         frame.setVisible(true);
@@ -136,7 +140,7 @@ public class GameOfLife extends JFrame{
         while(true){
             //wait a moment
             try{
-                Thread.currentThread().sleep(1000/speedController.getValue());
+                Thread.sleep(1000/speedController.getValue());
             }catch(InterruptedException e){
                 System.out.println(e.toString());
             }
