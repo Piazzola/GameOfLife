@@ -206,6 +206,7 @@ public class GameOfLife extends JFrame{
                                 }
                             };
                             break;
+                        //blinker
                         case 1:
                             grid[cr][cc].born();
                             if((cr+1)<row)
@@ -213,6 +214,7 @@ public class GameOfLife extends JFrame{
                             if((cr+2)<row)
                                 grid[cr+2][cc].born();
                             break;
+                        //toad
                         case 2:
                             grid[cr][cc].born();
                             if((cr+1)<row){
@@ -233,6 +235,7 @@ public class GameOfLife extends JFrame{
                                     grid[cr][cc+2].born();
                             }
                             break;
+                        //beacon
                         case 3:
                             grid[cr][cc].born();
                             if((cr+1)<row){
@@ -260,6 +263,7 @@ public class GameOfLife extends JFrame{
                                     grid[cr][cc+1].born();
                             }
                             break;
+                        //pulsar
                         case 4:
                             grid[cr][cc].born();
                             if((cr+5)<row)
@@ -370,6 +374,7 @@ public class GameOfLife extends JFrame{
                                 }
                             }
                             break;
+                        //glider
                         case 5:
                             grid[cr][cc].born();
                             if((cc+1)<col){
@@ -385,6 +390,7 @@ public class GameOfLife extends JFrame{
                                 }
                             }
                             break;
+                        //lightweight spaceship
                         case 6:
                             grid[cr][cc].born();
                             if((cc+3)<col)
@@ -547,7 +553,7 @@ public class GameOfLife extends JFrame{
                             next[currentRow][c]=!grid[currentRow][c].isDead();
                     }
                 }
-                currentRow+=offset;
+                currentRow+=offset; //go to next row
             }
         }
         /**This metod scan the neighbour cells of the cell located with the 
