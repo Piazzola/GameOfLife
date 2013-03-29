@@ -1,6 +1,7 @@
-/**Game of Life 
- * <br>
- * @author <A HREF="mailto:mirko.piazzola@gmail.com"> Mirko Piazzola VR353055 </A>
+/**
+ * Game of Life.
+ * @author Mirko Piazzola VR353055 <a href="mailto:mirko.piazzola@gmail.com">mirko.piazzola@gmail.com</a>
+ * @author Davide Bonuzzi VR351735 <a href="mailto:mirko.piazzola@gmail.com">davide.bonuzzi@gmail.com</a>
  */
 package gameoflife;
 import java.awt.Color;
@@ -14,36 +15,64 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JSlider;
-/**Main class of the Game of Life*/
+/**
+ * Main class of the Game of Life.
+ */
 public class GameOfLife extends JFrame{
-    /**The number of rows in the grid printed on screen.*/
+    /**
+     * The number of rows in the grid printed on screen.
+     */
     int row;
-    /**The number of columns in the grid printed on screen.*/
+    /**
+     * The number of columns in the grid printed on screen.
+     */
     int col;
-    /**The size, in pixels, of a cell*/
+    /**
+     * The size, in pixels, of a cell.
+     */
     final int dim=10;
-    /**The matrix of the cells that compose the world of Game of Life*/
+    /**
+     * The matrix of the cells that compose the world of Game of Life.
+     */
     Cell grid[][];
-    /**The temporary matrix of the state of cells for the next generation*/
+    /**
+     * The temporary matrix of the state of cells for the next generation.
+     */
     boolean next[][];
-    /**The color value of the dead cells*/
+    /**
+     * The color value of the dead cells.
+     */
     final Color DEAD=Color.BLACK;
-    /**The color value of the alive cells*/
+    /**
+     * The color value of the alive cells.
+     */
     final Color ALIVE=Color.GREEN;
-    /**The values of the dimension of the screen where Game of Life is running*/
+    /**
+     * The values of the dimension of the screen where Game of Life is running.
+     */
     Dimension screenSize=Toolkit.getDefaultToolkit().getScreenSize();
-    /**The state of the game that specifies if it has to proccess the next 
-     * generation or not*/
+    /**
+     * The state of the game that specifies if it has to proccess the next 
+     * generation or not.
+     */
     boolean play=false;
     /**The value of the last widged clicked*/
     int click=0;
-    /**The slider component used to control the refresh speed of the game*/
+    /**
+     * The slider component used to control the refresh speed of the game.
+     */
     JSlider speedController;
-    /**The array of threads that scan the world to generate the next 
-     * generation*/
+    /**
+     * The array of threads that scan the world to generate the next 
+     * generation.
+     */
     RowUpdater thread[];
-    /**The constructor of Game of Life that build the window with the 
-     * controllers*/
+    /**
+     * The constructor of Game of Life that build the window with the 
+     * controllers
+     * @param threads number of threads that scan the world to generate the 
+     * next generation.
+     */
     public GameOfLife(int threads){
         super();
         createWindow();
@@ -51,10 +80,14 @@ public class GameOfLife extends JFrame{
         printGrid();
         if(threads<1)
             threads=1;
+        if(threads>row)
+            threads=row;
         thread=new RowUpdater[threads];
-        evolve(threads);
+        evolve();
     }
-    /**This metod creates the fullscreen window*/
+    /**
+     * This metod creates the fullscreen window.
+     */
     private void createWindow() {
         //no title bar
         setUndecorated(true); 
@@ -65,8 +98,10 @@ public class GameOfLife extends JFrame{
         row=screenSize.height/dim; 
         col=(screenSize.width-80)/dim;
     }
-    /**This metod print on the left side window the play/pause, widgets, 
-     * close buttons and speed slider*/
+    /**
+     * This metod print on the left side window the play/pause, widgets, 
+     * close buttons and speed slider.
+     */
     private void printControllers(){
         //print playpause button
         PlayPause pp=new PlayPause();
@@ -108,7 +143,9 @@ public class GameOfLife extends JFrame{
         speedController.setBounds(0, 640, 80, screenSize.height-640);
         getContentPane().add(speedController);
     }
-    /**This metod print the world of cells*/
+    /**
+     * This metod print the world of cells.
+     */
     private void printGrid() {
         grid=new Cell[row=screenSize.height/dim][col=(screenSize.width-80)/dim];
         next=new boolean[row][col];
@@ -119,8 +156,11 @@ public class GameOfLife extends JFrame{
         }
         setVisible(true);
     }
-    /**This, is the main, asks how many threads use to build generations and 
-     * starts the Game of Life*/
+    /**
+     * This, is the main, asks how many threads use to build generations and 
+     * starts the Game of Life.
+     * @param args array of options not used in this program
+     */
     public static void main(String[] args) {
         String res;
         GameOfLife frame;
@@ -135,8 +175,10 @@ public class GameOfLife extends JFrame{
         }
         frame.setVisible(true);
     }
-    /**This metod starts threads when user click on play and updates the world*/
-    private void evolve(int threads){
+    /**
+     * This metod starts threads when user click on play and updates the world.
+     */
+    private void evolve(){
         while(true){
             //wait a moment
             try{
@@ -146,12 +188,12 @@ public class GameOfLife extends JFrame{
             }
             //if play was clicked start threads
             if(play){
-                for(int t=0;t<threads;t++){
-                    thread[t]=new RowUpdater(t,threads);
+                for(int t=0;t<thread.length;t++){
+                    thread[t]=new RowUpdater(t,thread.length);
                     thread[t].start();
                 }
                 //wait for threads
-                for(int t=0;t<threads;t++){
+                for(int t=0;t<thread.length;t++){
                     try {
                         thread[t].join();
                     } catch (InterruptedException ex) {
@@ -171,20 +213,38 @@ public class GameOfLife extends JFrame{
             }
         }
     }
-    /**Cell is the object on what the Game of Life is based. This class 
-     * specifies the state of a cell and what happen if it being clicked.*/
+    /**
+     * Cell is the object on what the Game of Life is based. This class 
+     * specifies the state of a cell and what happen if it being clicked.
+     */
     public class Cell extends JButton {
-        /**The state of the cell.*/
+        /**
+         * The state of the cell.
+         */
         private boolean dead=true;
-        /**The row where this cell is located*/
+        /**
+         * The row where this cell is located.
+         */
         private final int cr;
-        /**The column where this cell is located*/
+        /**
+         * The column where this cell is located.
+         */
         private final int cc;
-        /**The weight of the controllers*/
+        /**
+         * The weight of the controllers.
+         */
         private final int cb;
-        /**The dimension of the cell*/
+        /**
+         * The dimension of the cell.
+         */
         private final int cd;
-        /**The constructor set a new dead cell*/
+        /**
+         * The constructor set a new dead cell.
+         * @param r world's row where the cell will be located 
+         * @param c world's column where the cell will be located 
+         * @param b width in pixels of the border control buttons 
+         * @param d dimension of the cell in pixels
+         */
         protected Cell(int r, int c, int b, int d) {
             //build cell button
             super();
@@ -425,24 +485,35 @@ public class GameOfLife extends JFrame{
                 }
             });
         }
-        /**This metod kill the cell, setting color and the state*/
+        /**
+         * This metod kill the cell, setting color and the state.
+         */
         public void die(){
             setBackground(DEAD);
             dead=true;
         }
-        /**This metod make the cell born, setting color and state*/
+        /**
+         * This metod make the cell born, setting color and state.
+         */
         public void born(){
             setBackground(ALIVE);
             dead=false;
         }
-        /**This metod return true if the cell is dead*/
+        /**
+         * This metod return true if the cell is dead.
+         * @return true if the cell is dead
+         */
         public boolean isDead(){
             return dead;
         }
     }
-    /**This class specifies the play/pause button's behavior.*/
+    /**
+     * This class specifies the play/pause button's behavior.
+     */
     public class PlayPause extends JButton{
-        /**The constructor creates the button*/
+        /**
+         * The constructor creates the button.
+         */
         protected PlayPause(){
             super(new ImageIcon("images/playPause.jpg"));
             this.addActionListener(new ActionListener() {
@@ -453,15 +524,20 @@ public class GameOfLife extends JFrame{
                 }
             });
         }
-        /**This metod return true if the play/pause's state is paused*/
+        /**
+         * @return true if the play/pause's state is paused
+         */
         public boolean isPaused(){
             return !play;
         }
     }
-    /**Pattern is the button used to set a configuration of alive cells.*/
+    /**
+     * Pattern is the button used to set a configuration of alive cells.
+     */
     public class Pattern extends JButton{
         /**The constructor build the button with the appropriate image and 
-         * behavior*/
+         * behavior 
+         * @param t name of the type of pattern*/
         protected Pattern(String t){
             super(new ImageIcon("images/" + t + ".jpg"));
             switch(t){
@@ -516,7 +592,9 @@ public class GameOfLife extends JFrame{
             
         } 
     }
-    /**Close is the button used to terminate the game.*/
+    /**
+     * Close is the button used to terminate the game.
+     */
     public class Close extends JButton{
         /**The constructor build the button with the close image*/
         protected Close(){
@@ -529,20 +607,32 @@ public class GameOfLife extends JFrame{
             });
         }
     }
-    /**RowUpdater is the class that specifies what the threads have to do.*/
+    /**
+     * RowUpdater is the class that specifies what the threads have to do.
+     */
     public class RowUpdater extends Thread {
-        /**This variable takes account on which row operate.*/
+        /**
+         * This variable takes account on which row operate.
+         */
         private int currentRow;
-        /**This is the value of how many rows skip from a scan and its next.*/
+        /**
+         * This is the value of how many rows skip from a scan and its next.
+         */
         private final int offset;
-        /**The constructor saves the first row to scan and the offset.*/
+        /**
+         * The constructor saves the first row to scan and the offset. 
+         * @param start the first row to scan 
+         * @param os the offset value of rows to skip from a scan and its next
+         */
         protected RowUpdater(int start,int os){
             currentRow=start;
             offset=os;
         }
         @Override
-        /**This metod scan every cell on a row and decides which cells will die
-         * according to how many neighbours them have.*/
+        /**
+         * This metod scan every cell on a row and decides which cells will die
+         * according to how many neighbours them have.
+         */
         public void run(){
             int lnb;
             while(currentRow<row){
@@ -560,9 +650,11 @@ public class GameOfLife extends JFrame{
                 currentRow+=offset; //go to next row
             }
         }
-        /**This metod scan the neighbour cells of the cell located with the 
-         * coordinates passed as parameters and return the number of the aliving
-         * neighbour cells*/
+        /**This metod scan the neighbour cells of a cell 
+         * @param r the row where the cell is located 
+         * @param c the column where the cell is located
+         * @return number of neighbour cells
+         */
         private int livingNeighbours(int r, int c){
             int lnb=0;
             if(!grid[r][c].isDead())
