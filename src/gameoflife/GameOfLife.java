@@ -1,7 +1,7 @@
 /**
  * Game of Life.
  * @author Mirko Piazzola VR353055 <a href="mailto:mirko.piazzola@gmail.com">mirko.piazzola@gmail.com</a>
- * @author Davide Bonuzzi VR351735 <a href="mailto:mirko.piazzola@gmail.com">davide.bonuzzi@gmail.com</a>
+ * @author Davide Bonuzzi VR351735 <a href="mailto:davide.bonuzzi@gmail.com">davide.bonuzzi@gmail.com</a>
  */
 package gameoflife;
 import java.awt.Color;
